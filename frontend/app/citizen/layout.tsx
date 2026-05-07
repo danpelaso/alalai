@@ -26,13 +26,14 @@ export default async function CitizenLayout({
     .toUpperCase()
     .slice(0, 2);
   const total = reports.length;
+  const assignedLocation = user?.location_assigned?.trim() || null;
 
   return (
     <div className="h-screen flex flex-col bg-background overflow-hidden">
       <SessionGuard />
       <CitizenNav displayName={displayName} initials={initials} />
       <div className="flex-1 flex overflow-hidden">
-        <CitizenSidebar total={total} />
+        <CitizenSidebar total={total} assignedLocation={assignedLocation} />
         <main className="flex-1 overflow-y-auto pb-16 md:pb-0">{children}</main>
       </div>
       <CitizenMobileNav />
@@ -87,7 +88,13 @@ function CitizenNav({
   );
 }
 
-function CitizenSidebar({ total }: { total: number }) {
+function CitizenSidebar({
+  total,
+  assignedLocation,
+}: {
+  total: number;
+  assignedLocation: string | null;
+}) {
   return (
     <aside className="w-64 border-r border-border bg-card flex-col hidden md:flex shrink-0 overflow-hidden">
       {/* Nav links */}
@@ -134,7 +141,7 @@ function CitizenSidebar({ total }: { total: number }) {
         <div className="rounded-2xl bg-accent/8 border border-accent/15 px-3 py-2.5">
           <p className="text-xs font-bold text-accent mb-0.5">Need help?</p>
           <p className="text-[11px] text-muted-foreground">
-            Barangay San Isidro Hall
+            {assignedLocation ? `${assignedLocation} help desk` : "Barangay help desk"}
           </p>
           <p className="text-sm font-bold text-foreground mt-0.5">
             (02) 8123-4567
